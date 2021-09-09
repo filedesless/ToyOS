@@ -2,11 +2,18 @@ CC=~/opt/cross/bin/clang
 LD=~/opt/cross/bin/ld.lld
 TARGET=i386-elf
 
-main: main.o
-	$(LD) main.o -o main
+all: build/ build/kernel.o
 
-main.o: main.c
-	$(CC) -target $(TARGET) -o main.o main.c -c
+# build/ToyOS.bin: build/kernel.o build/boot.o
+# 	$(LD) build/kernel.o -o build/ToyOS.bin -T linker.ld
+
+build/kernel.o: kernel.c
+	$(CC) -target $(TARGET) kernel.c -c -ffreestanding
+
+# build/boot.o: boot.s
+
+build/:
+	mkdir -p build
 
 clean:
-	rm -f main.o main
+	rm -f kernel.o kernel
